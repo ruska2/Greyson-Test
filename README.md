@@ -1,7 +1,9 @@
 Test goal:
 ----------------------
 The goal of this  test is to use best practises for refactoring the actual code.
-You can do any kind of changes to the project you see fit.
+You can do any kind of changes to the project you see fit(also the visual & the text output), 
+but the basic functionality must be the same, as described in the usage of the application.
+
 
 ----------------------
 ----------------------
