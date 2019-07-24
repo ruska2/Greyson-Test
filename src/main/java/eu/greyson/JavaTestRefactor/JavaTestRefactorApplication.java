@@ -12,10 +12,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JavaTestRefactorApplication implements CommandLineRunner {
 
 
-	PaymentModel paymentModel = new PaymentModel();
-
-	Validate validate = new Validate();
-
+	PaymentModel paymentModel;
+	PaymentController paymentController;
+	
+	public JavaTestRefactorApplication() {
+		paymentModel = new PaymentModel();
+		paymentController = new PaymentController();
+		paymentModel.setPaymentController(paymentController);
+		paymentController.setPaymentModel(paymentModel);
+	}
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(JavaTestRefactorApplication.class);
@@ -37,7 +42,7 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 
 		while (true) {
 			String input = readInput(bufferedReader);
-			Payment payment = parsePayment(input);
+			Payment payment = paymentController.parsePayment(input);
 
 			if (payment != null) {
 				paymentModel.processPayment(payment);
@@ -75,15 +80,6 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 			return null;
 		}
 	}
-
-	public Payment parsePayment(String payment) {
-		if (validate.isValidInputFormat(payment)) {
-			String[] paymentSplit = payment.split(" ");
-			return new Payment(paymentSplit[0].toUpperCase(), paymentSplit[1]);
-		}
-		return null;
-	}
-
 
 
 }

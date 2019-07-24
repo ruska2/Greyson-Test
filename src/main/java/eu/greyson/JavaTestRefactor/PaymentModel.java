@@ -10,6 +10,8 @@ public class PaymentModel {
 	
 	private Map<String, BigDecimal> paymentMap = new PaymentMap();
 	
+	private PaymentController paymentController;
+	
 	public void processPayment(Payment payment) {
 		String curenncy = payment.getCurrency();
 		BigDecimal amount = paymentMap.get(payment.getCurrency());
