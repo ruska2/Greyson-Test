@@ -1,17 +1,10 @@
 package eu.greyson.JavaTestRefactor;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Validate {
-
-	public static final String QUIT = "quit";
-	public static final String VALIDATION_EXIT = "Exiting application.";
-	public static final String VALIDATION_INVALID_INPUT = "Invalid input: ";
-	public static final String VALIDATION_3_LETTERS = "Invalid input. Currency must be 3 letters !";
-	public static final String VALIDATION_AMOUNT_NUMBER = "Invalid input. Amount must consit of only numbers!";
-
 	/***
 	 * Input validation for the file or keyboard input
 	 *
@@ -21,8 +14,8 @@ public class Validate {
 	 */
 	public boolean isValidInputFormat(String input) {
 
-		if (QUIT.equals(input)) {
-			System.out.println(VALIDATION_EXIT);
+		if (ValidationConstants.QUIT.equals(input)) {
+			System.out.println(ValidationConstants.VALIDATION_EXIT);
 			return false;
 		}
 
@@ -33,19 +26,19 @@ public class Validate {
 		String[] paymentSplit = input.trim().split(" ");
 
 		if (paymentSplit.length != 2) {
-			System.out.println(VALIDATION_INVALID_INPUT + input);
+			System.out.println(ValidationConstants.VALIDATION_INVALID_INPUT + input);
 			return false;
 		}
 
 		if (paymentSplit[0].length() != 3) {
-			System.out.println(VALIDATION_3_LETTERS);
+			System.out.println(ValidationConstants.VALIDATION_3_LETTERS);
 			return false;
 		}
 
 		try {
 			new BigDecimal(paymentSplit[1]);
 		} catch (NumberFormatException nfe) {
-			System.out.println(VALIDATION_AMOUNT_NUMBER);
+			System.out.println(ValidationConstants.VALIDATION_AMOUNT_NUMBER);
 			return false;
 		}
 

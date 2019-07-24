@@ -1,32 +1,21 @@
 package eu.greyson.JavaTestRefactor;
 
-import org.apache.commons.lang3.StringUtils;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.util.Map;
+
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
 @SpringBootApplication
 public class JavaTestRefactorApplication implements CommandLineRunner {
 
-	public static final String QUIT = "quit";
-	public static final String INPUT = "Input > ";
-	public static final String SEPARATOR = "=================================================";
-	public static final String HEADER = "Payment Tracker application";
-	public static final String VALIDATION_EXIT = "Exiting application.";
-	public static final String VALIDATION_INVALID_INPUT = "Invalid input: ";
-	public static final String VALIDATION_3_LETTERS = "Invalid input. Currency must be 3 letters !";
-	public static final String VALIDATION_AMOUNT_NUMBER = "Invalid input. Amount must consit of only numbers!";
-
 	Boolean isReading = true;
 
-	private Map<String, BigDecimal> paymentMap = new HashMap<>();
+	private Map<String, BigDecimal> paymentMap = new PaymentMap();
 
 	Validate validate = new Validate();
 
@@ -44,7 +33,7 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 	}
 
 	private void trackerService() {
-		System.out.println(SEPARATOR + "\n" + HEADER + "\n" + SEPARATOR);
+		System.out.println(MessageConstants.SEPARATOR + "\n" + MessageConstants.HEADER + "\n" + MessageConstants.SEPARATOR);
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
 		// fileName argument check, if true try to read file
@@ -58,29 +47,29 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 			}
 
 
-			System.out.println("\n\n=== Actual balances:"+getNetCurrencies());
+			System.out.println("\n\n=== Actual balances:"+paymentMap);
 		}
 
-		System.out.println(SEPARATOR + "\n" + VALIDATION_EXIT);
+		System.out.println(MessageConstants.SEPARATOR + "\n" + ValidationConstants.VALIDATION_EXIT);
 	}
 
 	public String readInput(BufferedReader bufferedReader) {
-		System.out.print(INPUT);
+		System.out.print(MessageConstants.INPUT);
 		String inputLine = null;
 
 		try {
 			inputLine = bufferedReader.readLine();
 
 			//TODO add input validation for -h to show usage and basic validation
-			if (QUIT.equals(inputLine.toLowerCase())) {
+			if (ValidationConstants.QUIT.equals(inputLine.toLowerCase())) {
 				isReading = false;
-				return QUIT;
+				return ValidationConstants.QUIT;
 			}
 
 			return inputLine;
 
 		} catch (Exception e) {
-			System.out.println(VALIDATION_INVALID_INPUT + inputLine);
+			System.out.println(ValidationConstants.VALIDATION_INVALID_INPUT + inputLine);
 			return null;
 		}
 	}
@@ -106,19 +95,4 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 		}
 	}
 
-	public String getNetCurrencies() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("\n");
-		paymentMap.forEach((k, v) -> {
-			if (v != BigDecimal.ZERO) {
-				builder.append("> "+k + " " + v + "\n");
-			}
-		});
-
-		if (StringUtils.isBlank(builder.toString())) {
-			return "";
-		}
-
-		return builder.toString();
-	}
 }
