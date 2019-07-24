@@ -18,10 +18,10 @@ public class PaymentModel {
 
 		if (amount != null) {
 			paymentMap.put(curenncy, amount.add(payment.getAmount()));
-			System.out.print(" (Updated)");
+			paymentController.forwardUpdated();
 		} else {
 			paymentMap.put(curenncy, payment.getAmount());
-			System.out.print(" (Added new Currency:"+ curenncy);
+			paymentController.forwardAddedNewCurrency(curenncy);
 		}
 	}
 }

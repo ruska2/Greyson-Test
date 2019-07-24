@@ -1,5 +1,7 @@
 package eu.greyson.JavaTestRefactor;
 
+import java.io.IOException;
+
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -11,12 +13,10 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 
 	PaymentModel paymentModel;
 	PaymentController paymentController;
+	CommandLineView commandLineView;
 	
 	public JavaTestRefactorApplication() {
-		paymentModel = new PaymentModel();
-		paymentController = new PaymentController();
-		paymentModel.setPaymentController(paymentController);
-		paymentController.setPaymentModel(paymentModel);
+		initializeComponents();
 	}
 
 	public static void main(String[] args) {
@@ -30,32 +30,37 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 	public void run(String... args) {
 		trackerService();
 	}
-
+	
+	private void initializeComponents(){
+		paymentModel = new PaymentModel();
+		paymentController = new PaymentController();
+		commandLineView = new CommandLineView();
+		paymentModel.setPaymentController(paymentController);
+		paymentController.setPaymentModel(paymentModel);
+		commandLineView.setPaymentController(paymentController);
+		paymentController.setCommandLineView(commandLineView);
+	}
+	
 	private void trackerService() {
-		System.out.println(MessageConstants.SEPARATOR + "\n" + MessageConstants.HEADER + "\n" + MessageConstants.SEPARATOR);
-		
+		commandLineView.showHeader();
 		InputReader reader = new InputReader();
+		
 		// fileName argument check, if true try to read file
-
 		while (true) {
-			String input = reader.readInput();
-			Payment payment = paymentController.parsePayment(input);
-
-			if (payment != null) {
-				paymentModel.processPayment(payment);
+			String input = "";
+			commandLineView.showWaitForInputmsg();
+			try {
+				input = reader.readInput();
+			} catch (IOException e) {
+				commandLineView.showMessage(ValidationConstants.VALIDATION_INVALID_INPUT + input);
 			}
-			
-			
 
-
-			System.out.println("\n\n=== Actual balances:"+paymentModel.getPaymentMap());
-			
 			if (input.equals(ValidationConstants.QUIT)){
+				commandLineView.showActualBalance();
 				break;
 			}
+			paymentController.processPayment(input);
 		}
-
-		System.out.println(MessageConstants.SEPARATOR + "\n" + ValidationConstants.VALIDATION_EXIT);
+		commandLineView.showEndMsg();
 	}
-
 }
