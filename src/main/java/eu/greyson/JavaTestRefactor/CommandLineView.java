@@ -34,5 +34,9 @@ public class CommandLineView {
 	public void showAddedNewCurrency(String curenncy){
 		System.out.println(MessageConstants.ADDED_NEW_CURRENCY+ curenncy);
 	}
+	
+	public void showInvalidInputMsg(String input){
+		System.out.println(ValidationConstants.VALIDATION_INVALID_INPUT + input);
+	}
 
 }

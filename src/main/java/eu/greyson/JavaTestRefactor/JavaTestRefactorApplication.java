@@ -43,24 +43,27 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 	
 	private void trackerService() {
 		commandLineView.showHeader();
+	
+
 		InputReader reader = new InputReader();
-		
-		// fileName argument check, if true try to read file
 		while (true) {
-			String input = "";
 			commandLineView.showWaitForInputmsg();
+			
+			String input = "";
 			try {
 				input = reader.readInput();
 			} catch (IOException e) {
-				commandLineView.showMessage(ValidationConstants.VALIDATION_INVALID_INPUT + input);
+				commandLineView.showInvalidInputMsg(input);
 			}
-
+			
 			if (input.equals(ValidationConstants.QUIT)){
 				commandLineView.showActualBalance();
 				break;
 			}
+			
 			paymentController.processPayment(input);
 		}
+		
 		commandLineView.showEndMsg();
 	}
 }
