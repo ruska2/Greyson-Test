@@ -2,8 +2,6 @@ package eu.greyson.JavaTestRefactor;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.util.Map;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
@@ -13,9 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class JavaTestRefactorApplication implements CommandLineRunner {
 
-	Boolean isReading = true;
 
-	private Map<String, BigDecimal> paymentMap = new PaymentMap();
+	PaymentModel paymentModel = new PaymentModel();
 
 	Validate validate = new Validate();
 
@@ -38,16 +35,22 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 
 		// fileName argument check, if true try to read file
 
-		while (isReading) {
+		while (true) {
 			String input = readInput(bufferedReader);
 			Payment payment = parsePayment(input);
 
 			if (payment != null) {
-				processPayment(payment);
+				paymentModel.processPayment(payment);
 			}
+			
+			
 
 
-			System.out.println("\n\n=== Actual balances:"+paymentMap);
+			System.out.println("\n\n=== Actual balances:"+paymentModel.getPaymentMap());
+			
+			if (input.equals(ValidationConstants.QUIT)){
+				break;
+			}
 		}
 
 		System.out.println(MessageConstants.SEPARATOR + "\n" + ValidationConstants.VALIDATION_EXIT);
@@ -62,7 +65,6 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 
 			//TODO add input validation for -h to show usage and basic validation
 			if (ValidationConstants.QUIT.equals(inputLine.toLowerCase())) {
-				isReading = false;
 				return ValidationConstants.QUIT;
 			}
 
@@ -82,17 +84,6 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 		return null;
 	}
 
-	public void processPayment(Payment payment) {
-		String curenncy = payment.getCurrency();
-		BigDecimal amount = paymentMap.get(payment.getCurrency());
 
-		if (amount != null) {
-			paymentMap.put(curenncy, amount.add(payment.getAmount()));
-			System.out.print(" (Updated)");
-		} else {
-			paymentMap.put(curenncy, payment.getAmount());
-			System.out.print(" (Added new Currency:"+ curenncy);
-		}
-	}
 
 }
