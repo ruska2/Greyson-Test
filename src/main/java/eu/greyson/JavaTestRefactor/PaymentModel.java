@@ -17,11 +17,19 @@ public class PaymentModel {
 		BigDecimal amount = paymentMap.get(payment.getCurrency());
 
 		if (amount != null) {
-			paymentMap.put(curenncy, amount.add(payment.getAmount()));
-			paymentController.forwardUpdated();
+			updateCurenncy(curenncy, amount, payment);
 		} else {
-			paymentMap.put(curenncy, payment.getAmount());
-			paymentController.forwardAddedNewCurrency(curenncy);
+			addNewCurenncy(curenncy, amount, payment);
 		}
+	}
+	
+	private void addNewCurenncy(String curenncy, BigDecimal amount, Payment payment) {
+		paymentMap.put(curenncy, payment.getAmount());
+		paymentController.forwardAddedNewCurrency(curenncy);
+	}
+	
+	private void updateCurenncy(String curenncy, BigDecimal amount, Payment payment) {
+		paymentMap.put(curenncy, amount.add(payment.getAmount()));
+		paymentController.forwardUpdated();
 	}
 }

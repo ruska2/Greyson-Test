@@ -53,17 +53,33 @@ public class JavaTestRefactorApplication implements CommandLineRunner {
 			try {
 				input = reader.readInput();
 			} catch (IOException e) {
-				commandLineView.showInvalidInputMsg(input);
+				commandLineView.showInvalidInputMsg();
 			}
 			
-			if (input.equals(ValidationConstants.QUIT)){
-				commandLineView.showActualBalance();
-				break;
-			}
+			if (isQuit(input)) break;
+			if (isInfoSign(input)) continue;
 			
+
 			paymentController.processPayment(input);
 		}
 		
 		commandLineView.showEndMsg();
+	}
+	
+	private boolean isQuit(String input) {
+		if (input.equals(ValidationConstants.QUIT)){
+			commandLineView.showActualBalance();
+			commandLineView.showMessage(ValidationConstants.VALIDATION_EXIT);
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isInfoSign(String input) {
+		if (input.equals(ValidationConstants.INFO_SIGN)) {
+			commandLineView.showInfo();
+			return true;
+		}
+		return false;
 	}
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
 
+@SuppressWarnings("serial")
 public class PaymentMap extends HashMap<String, BigDecimal> {
 	
 	@Override

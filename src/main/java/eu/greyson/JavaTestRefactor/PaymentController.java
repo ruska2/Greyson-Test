@@ -15,11 +15,8 @@ public class PaymentController {
 			String[] paymentSplit = payment.split(" ");
 			return new Payment(paymentSplit[0].toUpperCase(), paymentSplit[1]);
 		}
+		commandLineView.showMessage(validate.getErrorMsg());
 		return null;
-	}
-	
-	public void forwardMessage(String message){
-		commandLineView.showMessage(message);
 	}
 	
 	public void processPayment(String input){

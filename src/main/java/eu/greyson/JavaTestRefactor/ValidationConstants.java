@@ -7,5 +7,7 @@ public class ValidationConstants {
 	public static final String VALIDATION_3_LETTERS = "Invalid input. Currency must be 3 letters !";
 	public static final String VALIDATION_AMOUNT_NUMBER = "Invalid input. Amount must consit of only numbers!";
 	public static final String QUIT = "quit";
+	public static final String INFO_SIGN = "-h";
+	public static final String VALIDATION_BLANK_INPUT = "Input should not be empty!";
 
 }

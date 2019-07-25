@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.Data;
+
+@Data
 public class Validate {
 	/***
 	 * Input validation for the file or keyboard input
@@ -12,36 +15,57 @@ public class Validate {
 	 * @return <b>true</b> only if the payment string representation has a 3 letter currency and a number amount
 	 * <p><b>false</b> if invalid payment or aborting application using the "quit" string
 	 */
+	
+	private String errorMsg = "";
+	
 	public boolean isValidInputFormat(String input) {
-
-		if (ValidationConstants.QUIT.equals(input)) {
-			System.out.println(ValidationConstants.VALIDATION_EXIT);
-			return false;
-		}
-
-		if (StringUtils.isBlank(input)) {
-			return false;
-		}
+		
+		errorMsg = "";
+		
+		if (isBlank(input)) return false;
 
 		String[] paymentSplit = input.trim().split(" ");
 
-		if (paymentSplit.length != 2) {
-			System.out.println(ValidationConstants.VALIDATION_INVALID_INPUT + input);
-			return false;
-		}
+		if (!isValidSplit(paymentSplit.length, input)) return false;
 
-		if (paymentSplit[0].length() != 3) {
-			System.out.println(ValidationConstants.VALIDATION_3_LETTERS);
-			return false;
-		}
+		if (!isValidCurenncy(paymentSplit[0])) return false;
 
-		try {
-			new BigDecimal(paymentSplit[1]);
-		} catch (NumberFormatException nfe) {
-			System.out.println(ValidationConstants.VALIDATION_AMOUNT_NUMBER);
-			return false;
-		}
-
+		if (!isValidNumber(paymentSplit[1])) return false;
+		
 		return true;
+	}
+	
+	private boolean isBlank(String input) {
+		if (StringUtils.isBlank(input)) {
+			errorMsg = ValidationConstants.VALIDATION_BLANK_INPUT;
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isValidSplit(int paymentSplit, String input) {
+		if (paymentSplit != 2) {
+			errorMsg = ValidationConstants.VALIDATION_INVALID_INPUT + input;
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isValidCurenncy(String input) {
+		if (input.length() != 3) {
+			errorMsg = ValidationConstants.VALIDATION_3_LETTERS;
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean isValidNumber(String input) {
+		try {
+			new BigDecimal(input);
+			return true;
+		} catch (NumberFormatException nfe) {
+			errorMsg = ValidationConstants.VALIDATION_AMOUNT_NUMBER;
+			return false;
+		}
 	}
 }

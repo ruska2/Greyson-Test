@@ -15,9 +15,13 @@ public class InputReader {
 		String inputLine = null;
 	
 		inputLine = bufferedReader.readLine();
-		//TODO add input validation for -h to show usage and basic validation
+		
 		if (ValidationConstants.QUIT.equals(inputLine.toLowerCase())) {
 			return ValidationConstants.QUIT;
+		}
+		
+		if (ValidationConstants.INFO_SIGN.equals(inputLine.toLowerCase())) {
+			return ValidationConstants.INFO_SIGN;
 		}
 
 		return inputLine;
